@@ -1,0 +1,168 @@
+<div class="general">
+    <h3>Listado de alertas</h3>
+    <% alertas.forEach(function(alerta, i) { %>
+        <div id="alertaraiz" class="row">
+            <div class="panel panel-primary alerta">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><%= alerta.nodo.nombre %> - <%= alerta.fichero %></h3>
+                </div>
+                <div id="contenedor_alerta">
+                    <div class="row">
+                        <div id="response" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 vcenter">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input id="alerta_id" value="<%= alerta._id %>" hidden>
+                        <input id="alerta_tipo" value="<%= alerta.tipo %>" hidden>
+                        <% if(alerta.tipo == 1) { %>
+                            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 vcenter">
+                                <h5><strong>Condición alerta</strong></h5>
+                                <div class="input-group maxsize">
+                                    <input id="alerta_condicion" type="text" class="form-control" value="<%= alerta.condicion %>">
+                                </div>
+                            </div>
+                            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 vcenter">
+                                <h5><strong>Valor condición</strong></h5>
+                                <div class="input-group maxsize">
+                                    <input id="alerta_valor" type="text" class="form-control" value="<%= alerta.valorone %>">
+                                </div>
+                            </div>
+                            <% if (alerta.valortwo) { %>
+                                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 vcenter">
+                                    <h5><strong>Valor condición</strong></h5>
+                                    <div class="input-group maxsize">
+                                        <input id="alerta_valor2" type="text" class="form-control" value="<%= alerta.valortwo %>">
+                                    </div>
+                                </div>
+                            <% } %>
+                            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 vcenter">
+                                <h5><strong>Frecuencia</strong></h5>
+                                <div class="input-group maxsize">
+                                    <input id="alerta_frecuencia" type="text" class="form-control" value="<%= alerta.frecuencia %>">
+                                </div>
+                            </div>
+                        <% } %>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 vcenter">
+                            <h5><strong>Mensaje</strong></h5>
+                            <div class="input-group maxsize">
+                                <input id="alerta_mensaje" type="text" class="form-control" value="<%= alerta.mensaje %>">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 vcenter">
+                            <h5><strong>Listado de usuarios</strong></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 vcenter">
+                            <div class="input-group maxsize sepusers">
+                                <input id="adduser" type="text" class="form-control" placeholder="@ejemplo">
+                                <span class="input-group-addon btn btn btn-success addblanc"><span class="glyphicon glyphicon-plus"></span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="usuer_list" class="row usuer_list">
+                        <% alerta.usuarios.forEach(function(usuario, i) { %>
+                            <div class="col-md-2 vcenter usuario">
+                                <div class="input-group maxsize">
+                                    <input id="al_usuario" type="text" class="form-control usuarioval" value="<%= usuario %>">
+                                    <span class="input-group-addon btn btn btn-danger delblanc"><span class="glyphicon glyphicon-trash"></span></span>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 vcenter">
+                            <h5><strong>Listado de acciones</strong></h5>
+                        </div>
+                    </div>
+                    <div id="actions_list" class="row actions_list">
+                        <% alerta.acciones.forEach(function(accion, i) { %>
+                            <div class="col-lg-12 accionalerta">
+                                <input id="script_id" hidden value="<%= accion.script.script_id %>">
+                                <input id="script_fichero" hidden value="<%= accion.script.fichero %>">
+                                <input id="script_nombre" hidden value="<%= accion.script.nombre %>">
+                                <input id="script_comando" hidden value="<%= accion.script.comando %>">
+                                <input id="mac" hidden value="<%= accion.mac %>">
+                                <input id="nodonombre" hidden value="<%= accion.nombre_nodo %>">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <strong><%= accion.script.nombre %> - <%= accion.nombre_nodo %></strong>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row argumentos">
+                                            <% accion.script.argumentos.forEach(function(argumento, i) { %>
+                                                <div class="col-md-4 vcenter arg">
+                                                    <h5><strong><%= argumento.nombre %></strong></h5>
+                                                    <div class="input-group">
+                                                        <input id="valor" class="form-control" type="number" name="frec" value="<%= argumento.valor %>">
+                                                        <input id="arg_nombre" hidden value="<%= argumento.nombre %>">
+                                                        <input id="arg_orden" hidden value="<%= argumento.orden %>">
+                                                        <input id="arg_tipo" hidden value="<%= argumento.tipo %>">
+                                                    </div>
+                                                </div>
+                                            <% }); %>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                                <div class="pull-right">
+                                                    <button type="button" class="btn btn-danger margintop eliminaraccion">Eliminar acción</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 vcenter">
+                            <h5><strong>Añadir acción</strong></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 actual">
+                            <div class="input-group double-input">
+                                <select id="accion_nodo" class="form-control" id="sel_sensor" name="tipo_condicion">
+                                    <option value="0">Seleccionar nodo</option>
+                                    <% nodos.forEach(function(nodo, i) { %>
+                                        <option value="<%= nodo.mac %>"><%= nodo.nombre %> - <%= nodo.mac %></option>               
+                                    <% }); %>                        
+                                </select>
+                                <select id="accion_script" class="form-control" id="sel_sensor" name="tipo_sensor">
+                                    <option value="0">Seleccionar Script</option> 
+                                    <% scripts.forEach(function(script, i) { %>
+                                        <option value="<%= script.id %>"><%= script.nombre %></option>                        
+                                    <% }); %>
+                                </select>
+                                <span class="input-group-btn">
+                                    <button id="add_action_alert"  class="btn btn-success addActionEdit" type="button">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <hr id="sep">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <button type="button" class="btn btn-info btn-md adddelete actualizaralerta">
+                                <span class="glyphicon glyphicon-refresh"></span> Actualizar Alerta
+                            </button>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <div class="pull-right">
+                                <button type="button" class="btn btn-danger btn-md pull-right adddelete eliminaralerta">
+                                    <span class="glyphicon glyphicon-trash"></span> Eliminar Alerta
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% }); %>
+</div>

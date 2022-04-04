@@ -1,0 +1,156 @@
+<div class="general container">
+    <div class="col-sm-6 col-sm-offset-3">
+
+        <div id="responsecontent" class="col-sm-12 col-md-12 col-lg-12"></div>
+
+        <h1><span class="fa fa-sign-in"></span> Añadir alerta</h1>
+
+        <!-- LOGIN FORM -->
+        <form id="newalert" action="/alerta/add" name="nueva_alerta">
+            <div class="form-group">
+                <label>Seleccionar nodo</label>
+                <select id="alerta_mac" class="form-control" id="sel_sensor" name="tipo_condicion">
+                    <option value="0">Seleccionar</option>
+                    <% nodos.forEach(function(nodo, i) { %>
+                        <option value="<%= nodo.mac %>"><%= nodo.nombre %> - <%= nodo.mac %></option>               
+                    <% }); %>                        
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="sel_sensor">Script al que hace referencia</label>
+                <select id="alerta_tipo" class="form-control" id="sel_sensor" name="tipo_sensor">
+                    <option value="0">Seleccionar</option> 
+                    <% scripts.forEach(function(script, i) { %>
+                        <option value="<%= script.fichero %>"><%= script.nombre %></option>                        
+                    <% }); %>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Mensaje</label>
+                <input id="alerta_mensaje" type="text" class="form-control" name="descripcion" placeholder='":nombre" se substituirá por la ip del nodo. ":valor" se substituirá por el valor recibido'>
+            </div>
+            <div class="form-group">
+                <label>Tipo alerta</label>
+                <select id="alerta_tipo_condicion" class="form-control" id="sel_sensor" name="tipo_condicion">
+                    <option value="0">Seleccionar</option>
+                    <option value="1">Condición</option>
+                    <option value="2">Inmediata</option>
+                </select>
+            </div>
+            <div id="div_condicion" class="form-group">
+                
+            </div>
+            <div id="div_condicion_valor" class="form-inline marginbottom">
+                
+            </div>
+            <div id="div_condicion_frecuencia" class="form-group">
+                
+            </div>
+            <div class="form-group" id="fields">
+                <label class="control-label" for="field1">Usuarios a los que enviar el mensaje</label>
+                <div class="controls">
+                    <div class="entry input-group col-xs-6">
+                        <input id="user_input" class="form-control" name="fields" type="text" placeholder="@usuario" />
+                        <span class="input-group-btn">
+                            <button id="add_user_alert" onclick="AddUserToList();" class="btn btn-success btn-add" type="button">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <ul id="userlist" class="list-group">                        
+                </ul>
+            </div>
+            <div class="form-group" id="fields">
+                <label class="control-label" for="field1">Acciones</label>
+                    <div class="input-group double-input">
+                        <select id="accion_nodo" class="form-control" id="sel_sensor" name="tipo_condicion">
+                            <option value="0">Seleccionar nodo</option>
+                            <% nodos.forEach(function(nodo, i) { %>
+                                <option value="<%= nodo.mac %>"><%= nodo.nombre %> - <%= nodo.mac %></option>               
+                            <% }); %>                        
+                        </select>
+                        <select id="accion_script" class="form-control" id="sel_sensor" name="tipo_sensor">
+                            <option value="0">Seleccionar Script</option> 
+                            <% scripts.forEach(function(script, i) { %>
+                                <option value="<%= script.id %>"><%= script.nombre %></option>                        
+                            <% }); %>
+                        </select>
+                        <span class="input-group-btn">
+                            <button id="add_action_alert"  class="btn btn-success addAction" type="button">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div id="actionlistdiv">
+                    
+                </div>
+                <div class="pull-right"><button type="submit" class="btn btn-warning btn-lg">Añadir alerta</button></div>                                    
+            </div>            
+        </form>
+
+        <script type="text/javascript">
+            $("#newalert").submit(function(event) {
+                event.preventDefault();
+                var alerta = new Object();
+                alerta.mac = $('#alerta_mac').val();
+                alerta.fichero = $('#alerta_tipo').val();
+                alerta.mensaje = $('#alerta_mensaje').val();
+                if($('#alerta_tipo_condicion').val() == 1){
+                    alerta.tipo = 1;
+                    alerta.condicion = $('#alerta_condicion').val();
+                    alerta.frecuencia = $('#alerta_frecuencia').val();
+                    try{
+                        alerta.valorone = parseFloat($('#alerta_valor').val());
+                        alerta.valortwo = parseFloat($('#alerta_valor2').val());
+                    }catch(err){
+                    }
+                }else{
+                    alerta.tipo = 2;
+                }
+                var usuarios = [];
+                $('#userlist li').each(function(idx, li){
+                    usuarios.push($(li).text());
+                });
+                alerta.acciones = [];
+                $('#actionlistdiv .alertactionbody').each(function(idx, body){
+                    var accion = {script:{}};
+                    accion.script.script_id = $(body).find('#script_id:first').val();
+                    accion.script.fichero = $(body).find('#script_fichero:first').val();
+                    accion.script.comando = $(body).find('#script_comando:first').val();
+                    accion.script.nombre = $(body).find('#script_nombre:first').val();
+                    accion.mac = $(body).find('#mac:first').val();
+                    accion.nombre_nodo = $(body).find('#nodonombre:first').val();
+                    accion.script.argumentos = [];
+                    $(body).find('.argumentos .arg').each(function(idx, arg){
+                        var argumento = {};
+                        argumento.nombre = $(arg).find('#arg_nombre:first').val();
+                        argumento.tipo = $(arg).find('#arg_tipo:first').val();
+                        argumento.orden = $(arg).find('#arg_orden:first').val();
+                        argumento.valor = $(arg).find('#valor:first').val();
+                        accion.script.argumentos.push(argumento);
+                    });
+                    alerta.acciones.push(accion);
+                });
+                alerta.usuarios = usuarios;
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'),
+                    data: alerta,
+                    success: function(data, st, xhc) {
+                        if(xhc.status == 201){
+                            $('.general').html(data);
+                        }else{
+                            $('#responsecontent').html(data);
+                            setTimeout(function() {
+                                $('#response').fadeOut(300, function(){ $('#response').remove();});
+                            }, 2000);
+                        }
+                    }
+                }) 
+            });
+    </script>
+
+    </div>
+</div>

@@ -21,10 +21,9 @@ Serveral modules have been developed: the central server, the fog node module, t
 This research was supported by the Spanish Government (Agencia Estatal de Investigación) and the European Commission (Fondo Europeo de Desarrollo Regional) through Grant Number TIN2017-88547-P (AEI/FEDER, UE).
 
 
-
 # Servidor central
 
-Proceso de instalación del servidor central:
+Steps:
 
 - Imagen
   - Rasbian Jessie
@@ -39,7 +38,7 @@ Proceso de instalación del servidor central:
   - sudo apt-get install mongodb-server
   - sudo service mongodb start
 
-# Scripts monitorización
+# Monitoring Scripts
 Scripts en Python para monitorizar con las raspberry.
 
 # Nodo
@@ -49,5 +48,4 @@ Scripts en Python para monitorizar con las raspberry.
 
 # raspbian_link
 
-Link de la imatge Raspbian comprimida:
-https://mega.nz/#!y0IQDZZB!g8zi5njLHpqipZ9p8cGZVegP2uhGHcfq232h7SLjRCU
+Raspbian image url: https://mega.nz/#!y0IQDZZB!g8zi5njLHpqipZ9p8cGZVegP2uhGHcfq232h7SLjRCU

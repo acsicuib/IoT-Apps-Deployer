@@ -2,9 +2,9 @@ var TelegramBot = require('node-telegram-bot-api');
 var Usuario = require('../models/usuario');
 var Nodos = require('../operations/nodos');
 var Ssh = require('../ssh_operations/sshoperations.js');
-var token = '161755617:AAEkQY8R5qcMjQJAtCZ9NIiQFmJUDS_87R8';
+var token = 'xxxxxxx';
 var bot = new TelegramBot(token, { polling: true });
-var PASSWORD = 'fura4468AB';
+var PASSWORD = 'xxxxxx';
 
 bot.onText(/\/start/, function (msg, match) {
     try{
